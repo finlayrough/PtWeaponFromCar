@@ -13,15 +13,6 @@ local tafsw = true -- Text Above For Small Weapons -||-
 local tafmw = true -- Text Above For Melee Weapons -||-
 local tafdb = true -- Text Above For Duffle-Bag -||-
 
-local txt = "The person" -- /me text
-local bwtxt = "* The person takes a weapon out of the car's trunk. *"
-local dbtxt = "* The person takes a weapon out of the dufflebag. *"
-local dbtxterr = "Hey - This weapon can only be taken out of a car or a dufflebag."
-local bwtxterr = "Hey - This weapon can only be taken out of a car."
-local swtxt = "* The person takes a weapon out. *"
-local mwtxt = "* The person takes a melee weapon out. *"
-
-
 
 -- 3dtext settings --
 
@@ -148,106 +139,6 @@ meleeweaponslist = {
 
 
 --   end of settings   --
-
---   made by ELF#0001  --
---  3dme made by Elio  --
-
-
-
--- do not edit !!
-
-local nbrDisplaying = 1
-
--- do not edit !!
-
-RegisterCommand('me', function(source, args)
-    local text = "* "..txt 
-    for i = 1,#args do
-        text = text .. ' ' .. args[i]
-    end
-    text = text .. ' *'
-    TriggerServerEvent('3dme:shareDisplay', text)
-end)
-
-RegisterNetEvent('3dme:triggerDisplay')
-AddEventHandler('3dme:triggerDisplay', function(text, source)
-    local offset = 1 + (nbrDisplaying*0.14)
-    Display(GetPlayerFromServerId(source), text, offset)
-end)
-
-function Display(mePlayer, text, offset)
-    local displaying = true
-
-    -- Chat message
-    if chatMessage then
-        local coordsMe = GetEntityCoords(GetPlayerPed(mePlayer), false)
-        local coords = GetEntityCoords(PlayerPedId(), false)
-        local dist = Vdist2(coordsMe, coords)
-        if dist < 2500 then
-            TriggerEvent('chat:addMessage', {
-                color = { color.r, color.g, color.b },
-                multiline = true,
-                args = { text}
-            })
-        end
-    end
-
-    Citizen.CreateThread(function()
-        Wait(time*1000)
-        displaying = false
-    end)
-    Citizen.CreateThread(function()
-        nbrDisplaying = nbrDisplaying + 1
-        print(nbrDisplaying)
-        while displaying do
-            Wait(0)
-            local coordsMe = GetEntityCoords(GetPlayerPed(mePlayer), false)
-            local coords = GetEntityCoords(PlayerPedId(), false)
-            local dist = Vdist2(coordsMe, coords)
-            if dist < 2500 then
-                DrawText3D(coordsMe['x'], coordsMe['y'], coordsMe['z']+offset, text)
-            end
-        end
-        nbrDisplaying = nbrDisplaying - 1
-    end)
-end
-
-
-function DrawText3D(x,y,z, text)
-    local onScreen,_x,_y = World3dToScreen2d(x,y,z)
-    local px,py,pz = table.unpack(GetGameplayCamCoord())
-    local dist = GetDistanceBetweenCoords(px,py,pz, x,y,z, 1)
- 
-    local scale = ((1/dist)*2)*(1/GetGameplayCamFov())*100
-
-    if onScreen then
-
-        -- Formalize the text
-        SetTextColour(color.r, color.g, color.b, color.alpha)
-        SetTextScale(0.0*scale, 0.55*scale)
-        SetTextFont(font)
-        SetTextProportional(1)
-        SetTextCentre(true)
-        if dropShadow then
-            SetTextDropshadow(10, 100, 100, 100, 255)
-        end
-
-        -- Calculate width and height
-        BeginTextCommandWidth("STRING")
-        AddTextComponentString(text)
-        local height = GetTextScaleHeight(0.55*scale, font)
-        local width = EndTextCommandGetWidth(font)
-
-        -- Diplay the text
-        SetTextEntry("STRING")
-        AddTextComponentString(text)
-        EndTextCommandDisplayText(_x, _y)
-
-        if background.enable then
-            DrawRect(_x, _y+scale/45, width, height, background.color.r, background.color.g, background.color.b , background.color.alpha)
-        end
-    end
-end
 
 -- do not edit !!
 
@@ -387,8 +278,6 @@ Citizen.CreateThread(function()
 						bigWeaponOut = true
 						SetVehicleDoorOpen(vehicle, 5, false, false)
 						if tafbw == true then
-							local text = bwtxt
-							TriggerServerEvent('3dme:shareDisplay', text)
 						end
 						Citizen.Wait(2000)
 						SetVehicleDoorShut(vehicle, 5, false)
@@ -398,10 +287,8 @@ Citizen.CreateThread(function()
 								--drawNotification("* " ..GetPedDrawableVariation(playerPed,5).. "," ..GetPedTextureVariation(playerPed,5).. "," ..GetPedPaletteVariation(playerPed,5).. " *")
 								if GetPedDrawableVariation(playerPed,5) == 45 and GetPedTextureVariation(playerPed,5) == 0 and GetPedPaletteVariation(playerPed,5) == 0 then
 									bigWeaponOut = true
-									if tafdb == true then
-										local text = dbtxt
-										TriggerServerEvent('3dme:shareDisplay', text)
-									end
+					
+
 								else
 									Wait(1)
 									drawNotification("~p~ELF ~r~"..dbtxterr.."")
@@ -413,9 +300,7 @@ Citizen.CreateThread(function()
 									if GetPedDrawableVariation(playerPed,5) == 45 and GetPedTextureVariation(playerPed,5) == 0 and GetPedPaletteVariation(playerPed,5) == 0 then
 										bigWeaponOut = true
 										if tafdb == true then
-											local text = dbtxt
-											TriggerServerEvent('3dme:shareDisplay', text)
-										end
+
 									else
 										SetCurrentPedWeapon(playerPed, -1569615261)
 									end
@@ -440,9 +325,6 @@ Citizen.CreateThread(function()
 					if smallWeaponOut == false then
 						smallWeaponOut = true
 						if tafsw == true then
-							local text = swtxt
-							TriggerServerEvent('3dme:shareDisplay', text)
-						end
 						Citizen.Wait(100)
 					end
 				end
@@ -450,9 +332,6 @@ Citizen.CreateThread(function()
 					if meleeWeaponOut == false then
 						meleeWeaponOut = true
 						if tafmw == true then
-							local text = mwtxt
-							TriggerServerEvent('3dme:shareDisplay', text)
-						end
 						Citizen.Wait(100)
 					end
 				end
@@ -547,38 +426,7 @@ function isWeaponMelee(model)
 	return false
 end
 
--- do not edit !!
 
-function nameWeapon(model)
-	if model == -1569615261 then
-		local text = "* "..model.." Unarmed *"
-		TriggerEvent('chat:addMessage', {
-        color = { color.r, color.g, color.b },
-        multiline = true,
-        args = { text}
-		})
-		return true
-	else
-		for _, weapons in pairs(allweaponslist) do
-			if model == GetHashKey(weapons) then
-				local text = "* "..model.." "..weapons.." *"
-				TriggerEvent('chat:addMessage', {
-				color = { color.r, color.g, color.b },
-				multiline = true,
-				args = { text}
-				})
-				return true
-			end
-		end
-	end
-	local text = "* "..model.." ERROR *"
-	TriggerEvent('chat:addMessage', {
-	color = { color.r, color.g, color.b },
-	multiline = true,
-	args = { text}
-	})
-	return false
-end
 
 function drawNotification(Notification)
 	SetNotificationTextEntry('STRING')
