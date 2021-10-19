@@ -8,10 +8,10 @@
 
 local duffle = true -- do not use wip not working -- change if you dont want weapons out of a duffle-bag
 
-local tafbw = true -- Text Above For Big Weapons - change if you dont want text above for the weapons you take out of the car 
-local tafsw = true -- Text Above For Small Weapons -||-
-local tafmw = true -- Text Above For Melee Weapons -||-
-local tafdb = true -- Text Above For Duffle-Bag -||-
+local tafbw = false -- Text Above For Big Weapons - change if you dont want text above for the weapons you take out of the car 
+local tafsw = false -- Text Above For Small Weapons -||-
+local tafmw = false -- Text Above For Melee Weapons -||-
+local tafdb = false -- Text Above For Duffle-Bag -||-
 
 
 -- 3dtext settings --
