@@ -6,13 +6,7 @@
 
 local logEnabled = false
 
-RegisterServerEvent('3dme:shareDisplay')
-AddEventHandler('3dme:shareDisplay', function(text)
-	TriggerClientEvent('3dme:triggerDisplay', -1, text, source)
-	if logEnabled then
-		setLog(text, source)
-	end
-end)
+
 
 function setLog(text, source)
 	local time = os.date("%d/%m/%Y %X")
