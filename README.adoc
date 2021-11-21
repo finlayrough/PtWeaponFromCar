@@ -1,2 +1,4 @@
 This is a simple FiveM script to allow users to better the RP experience via getting weapons from cars OR duffel bags.
 The original script was outdated so I have decided to fork it to work better for current FiveM versions and disregard the usage of 3dme as I believe it does not look appealing for RP.
+
+Code is shitty, I probably won't update this.
