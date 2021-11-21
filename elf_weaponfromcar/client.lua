@@ -13,17 +13,26 @@ local tafsw = false -- Text Above For Small Weapons -||-
 local tafmw = false -- Text Above For Melee Weapons -||-
 local tafdb = false -- Text Above For Duffle-Bag -||-
 
+local txt = "" -- /me text
+local bwtxt = ""
+local dbtxt = ""
+local dbtxterr = "Hey - This weapon can only be taken out of a car or a dufflebag."
+local bwtxterr = "Hey - This weapon can only be taken out of a car."
+local swtxt = ""
+local mwtxt = ""
+
+
 
 -- 3dtext settings --
 
 local color = { r = 250, g = 140, b = 0, alpha = 255 } -- color of the text 
 local font = 0 -- font of the text
-local time = 4 -- duration of the display of the text in seconds
+local time = 10 -- duration of the display of the text in seconds
 local background = {
     enable = false, -- background toggle
     color = { r = 35, g = 35, b = 35, alpha = 200 }, -- background color
 }
-local chatMessage = false 
+local chatMessage = false
 local dropShadow = false
 
 
@@ -139,6 +148,17 @@ meleeweaponslist = {
 
 
 --   end of settings   --
+
+--   made by ELF#0001  --
+--  3dme made by Elio  --
+
+
+
+-- do not edit !!
+
+local nbrDisplaying = 1
+
+-- do not edit !!
 
 -- do not edit !!
 
@@ -278,6 +298,8 @@ Citizen.CreateThread(function()
 						bigWeaponOut = true
 						SetVehicleDoorOpen(vehicle, 5, false, false)
 						if tafbw == true then
+							local text = bwtxt
+							TriggerServerEvent('3dme:shareDisplay', text)
 						end
 						Citizen.Wait(2000)
 						SetVehicleDoorShut(vehicle, 5, false)
@@ -287,8 +309,10 @@ Citizen.CreateThread(function()
 								--drawNotification("* " ..GetPedDrawableVariation(playerPed,5).. "," ..GetPedTextureVariation(playerPed,5).. "," ..GetPedPaletteVariation(playerPed,5).. " *")
 								if GetPedDrawableVariation(playerPed,5) == 45 and GetPedTextureVariation(playerPed,5) == 0 and GetPedPaletteVariation(playerPed,5) == 0 then
 									bigWeaponOut = true
-					
-
+									if tafdb == true then
+										local text = dbtxt
+										TriggerServerEvent('3dme:shareDisplay', text)
+									end
 								else
 									Wait(1)
 									drawNotification("~p~ELF ~r~"..dbtxterr.."")
@@ -300,7 +324,9 @@ Citizen.CreateThread(function()
 									if GetPedDrawableVariation(playerPed,5) == 45 and GetPedTextureVariation(playerPed,5) == 0 and GetPedPaletteVariation(playerPed,5) == 0 then
 										bigWeaponOut = true
 										if tafdb == true then
-
+											local text = dbtxt
+											TriggerServerEvent('3dme:shareDisplay', text)
+										end
 									else
 										SetCurrentPedWeapon(playerPed, -1569615261)
 									end
@@ -325,6 +351,9 @@ Citizen.CreateThread(function()
 					if smallWeaponOut == false then
 						smallWeaponOut = true
 						if tafsw == true then
+							local text = swtxt
+							TriggerServerEvent('3dme:shareDisplay', text)
+						end
 						Citizen.Wait(100)
 					end
 				end
@@ -332,6 +361,9 @@ Citizen.CreateThread(function()
 					if meleeWeaponOut == false then
 						meleeWeaponOut = true
 						if tafmw == true then
+							local text = mwtxt
+							TriggerServerEvent('3dme:shareDisplay', text)
+						end
 						Citizen.Wait(100)
 					end
 				end
@@ -426,7 +458,38 @@ function isWeaponMelee(model)
 	return false
 end
 
+-- do not edit !!
 
+function nameWeapon(model)
+	if model == -1569615261 then
+		local text = "* "..model.." Unarmed *"
+		TriggerEvent('chat:addMessage', {
+        color = { color.r, color.g, color.b },
+        multiline = true,
+        args = { text}
+		})
+		return true
+	else
+		for _, weapons in pairs(allweaponslist) do
+			if model == GetHashKey(weapons) then
+				local text = "* "..model.." "..weapons.." *"
+				TriggerEvent('chat:addMessage', {
+				color = { color.r, color.g, color.b },
+				multiline = true,
+				args = { text}
+				})
+				return true
+			end
+		end
+	end
+	local text = "* "..model.." ERROR *"
+	TriggerEvent('chat:addMessage', {
+	color = { color.r, color.g, color.b },
+	multiline = true,
+	args = { text}
+	})
+	return false
+end
 
 function drawNotification(Notification)
 	SetNotificationTextEntry('STRING')
