@@ -8,34 +8,6 @@
 
 local duffle = true -- do not use wip not working -- change if you dont want weapons out of a duffle-bag
 
-local tafbw = false -- Text Above For Big Weapons - change if you dont want text above for the weapons you take out of the car 
-local tafsw = false -- Text Above For Small Weapons -||-
-local tafmw = false -- Text Above For Melee Weapons -||-
-local tafdb = false -- Text Above For Duffle-Bag -||-
-
-local txt = "" -- /me text
-local bwtxt = ""
-local dbtxt = ""
-local dbtxterr = "Hey - This weapon can only be taken out of a car or a dufflebag."
-local bwtxterr = "Hey - This weapon can only be taken out of a car."
-local swtxt = ""
-local mwtxt = ""
-
-
-
--- 3dtext settings --
-
-local color = { r = 250, g = 140, b = 0, alpha = 255 } -- color of the text 
-local font = 0 -- font of the text
-local time = 10 -- duration of the display of the text in seconds
-local background = {
-    enable = false, -- background toggle
-    color = { r = 35, g = 35, b = 35, alpha = 200 }, -- background color
-}
-local chatMessage = false
-local dropShadow = false
-
-
 
 -- list of weapons to be taken out of a car
 
